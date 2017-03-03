@@ -29,8 +29,8 @@ import com.magossi.simbweb.domain.tarefa.TipoTarefaEnum;
 public class TarefasController {
 	
 	private static final String ADICIONAR_TAREFA_VIEW = "tarefa/AdicionarTarefa";
-	private static final String PESQUISA_TAREFAS_ATIVAS_VIEW = "tarefa/PesquisaTarefasAtivas";
-	private static final String PESQUISA_TAREFAS_CONCLUIDAS_VIEW = "tarefa/PesquisaTarefasConcluidas";
+	private static final String PESQUISA_TAREFAS_ATIVAS_VIEW = "tarefa/PesquisaTarefasAbertas";
+	private static final String PESQUISA_TAREFAS_CONCLUIDAS_VIEW = "tarefa/PesquisaTarefasFinalizadas";
 	
 	@Autowired
 	private FuncionarioClient funcionarioClient;
