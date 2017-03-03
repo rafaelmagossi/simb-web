@@ -90,8 +90,18 @@ public class BovinosController {
 		return mv;
 	}
 	
+	/* ----------------------------------- DELETE ---------------------------------------*/
 	
-	
+	@RequestMapping(value="{codigo}", method = RequestMethod.DELETE)
+	public String excluir(@PathVariable Long codigo) {
+		
+		System.out.println("codigo: "+codigo);
+		
+//		cadastroTituloService.excluir(codigo);
+//		
+//		attributes.addFlashAttribute("mensagem", "Título excluído com sucesso!");
+		return "redirect:/bovinos";
+	}
 	
 	/* ---------------------- Model Attributes ------------------------*/
 	

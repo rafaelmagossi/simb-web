@@ -73,9 +73,10 @@
 									<i class="fa  fa-pencil"></i>
 								</a>
 								
-								<button class="btn  btn-default btn-xs">
-									<i class="fa  fa-trash"></i>
-								</button>
+								<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+									th:attr="data-codigo=${bovino.idBovino}, data-descricao=${bovino.nomeBovino}">
+									<span class="fa  fa-trash"></span>
+								</a>
 							</div>
 							
 						</td>
@@ -102,8 +103,10 @@
 				</span>
 			</div>
 		</div>
+		<div layout:include="/layout/DialogoConfirmacaoExclusao"></div>
+		
 	</div>
-
+	
 </section>
 </body>
 </html>
