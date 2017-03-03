@@ -42,20 +42,6 @@ public class TarefasController {
 	private TarefaClient tarefaClient;
 
 	
-//	@RequestMapping("/adicionar/{codigo}")
-//	public ModelAndView edicao(@PathVariable("codigo") Long codigo) {
-//		Bovino bovinoMatriz = bovinoClient.listarUm(codigo);
-//		
-//		Tarefa tarefa = new Tarefa();
-//		tarefa.setBovinoMatriz(bovinoMatriz);
-//		
-//		
-//		
-//		ModelAndView mv = new ModelAndView(ADICIONAR_TAREFA_VIEW); 
-//		mv.addObject(bovinoMatriz);
-//		return mv;
-//	}
-	
 	
 	@RequestMapping("ativas")
 	public ModelAndView pesquisaAtivos(@RequestParam(defaultValue="todos") String descricao) {
