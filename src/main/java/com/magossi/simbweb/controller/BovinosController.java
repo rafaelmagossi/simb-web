@@ -13,15 +13,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.magossi.simbweb.client.BovinoClient;
+import com.magossi.simbweb.client.EccClient;
+import com.magossi.simbweb.client.PesoClient;
+import com.magossi.simbweb.client.TarefaClient;
 import com.magossi.simbweb.domain.bovino.Bovino;
 import com.magossi.simbweb.domain.bovino.Fazenda;
 import com.magossi.simbweb.domain.bovino.Pelagem;
 import com.magossi.simbweb.domain.bovino.Proprietario;
 import com.magossi.simbweb.domain.bovino.Raca;
+import com.magossi.simbweb.domain.tarefa.Tarefa;
 
 
 @Controller
@@ -30,11 +35,21 @@ public class BovinosController {
 	
 	private static final String ALTERAR_BOVINO_VIEW = "bovino/AlterarBovino";
 	private static final String PESQUISA_BOVINO_VIEW = "/bovino/PesquisaBovinos";
-	
-	
+
+	Bovino auxBovino;
 	
 	@Autowired
 	private BovinoClient bovinoClient;
+	
+	@Autowired
+	private TarefaClient tarefaClient;
+	
+	@Autowired
+	private EccClient eccClient;
+	
+	@Autowired
+	private PesoClient pesoClient;
+
 
 
 	/* ----------------------------------- GET ---------------------------------------*/
@@ -84,24 +99,76 @@ public class BovinosController {
 	
 	@RequestMapping("{codigo}")
 	public ModelAndView edicao(@PathVariable("codigo") Long codigo) {
-		Bovino bovino = bovinoClient.listarUm(codigo);
+		auxBovino = bovinoClient.listarUm(codigo);
 		ModelAndView mv = new ModelAndView(ALTERAR_BOVINO_VIEW); 
-		mv.addObject(bovino);
+		mv.addObject(auxBovino);
 		return mv;
 	}
 	
 	/* ----------------------------------- DELETE ---------------------------------------*/
 	
 	@RequestMapping(value="{codigo}", method = RequestMethod.DELETE)
-	public String excluir(@PathVariable Long codigo) {
+	public String excluirBovino(@PathVariable Long codigo, RedirectAttributes attributes) {
+	
+		Bovino bovino = bovinoClient.listarUm(codigo);
+		bovino.setStatus(false);
 		
-		System.out.println("codigo: "+codigo);
-		
-//		cadastroTituloService.excluir(codigo);
-//		
-//		attributes.addFlashAttribute("mensagem", "Título excluído com sucesso!");
-		return "redirect:/bovinos";
+		List<Tarefa> tarefas = tarefaClient.listarTarefasBovinoMatriz(bovino.getIdBovino());
+
+		try {
+			bovinoClient.alterar(bovino);
+			for(int i=0; i < tarefas.size() ; i++){
+				Tarefa tarefa = tarefas.get(i);
+				tarefa.setStatus(false);
+				tarefaClient.alterar(tarefa);
+				
+			}
+			attributes.addFlashAttribute("mensagem", "Bovino excluido com sucesso !");
+			return "redirect:/bovinos";
+		} catch (IllegalArgumentException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			return PESQUISA_BOVINO_VIEW;
+		}
+
 	}
+	
+	
+	@RequestMapping(value="/ecc/{idEcc}", method = RequestMethod.DELETE)
+	public String excluireEccBovino(@PathVariable Long idEcc, RedirectAttributes attributes) {
+
+		try {
+			eccClient.deletar(idEcc);
+			//eccClient.deletar(idEcc);
+			attributes.addFlashAttribute("mensagem", "Ecc excluido com sucesso !");
+			return "redirect:/bovinos/"+auxBovino.getIdBovino();
+		} catch (HttpServerErrorException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			String erro = ""+e.getStatusCode();
+			return "redirect:/"+ erro;
+			
+		}
+		
+	}
+	
+	
+	@RequestMapping(value="/peso/{idPeso}", method = RequestMethod.DELETE)
+	public String excluirePesoBovino(@PathVariable Long idPeso, RedirectAttributes attributes) {
+
+		try {
+			pesoClient.deletar(idPeso);
+			//eccClient.deletar(idEcc);
+			attributes.addFlashAttribute("mensagem", "Peso excluido com sucesso !");
+			return "redirect:/bovinos/"+auxBovino.getIdBovino();
+		} catch (HttpServerErrorException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			String erro = ""+e.getStatusCode();
+			return "redirect:/"+ erro;
+			
+		}
+		
+	}
+	
+	
 	
 	/* ---------------------- Model Attributes ------------------------*/
 	

@@ -19,18 +19,18 @@
 
 		<div class="container-fluid">
 
-			<div class="alert  alert-danger  alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<i class="fa  fa-exclamation-circle"></i> Já existe um bovino com o
-				nome informado.
-			</div>
+<!-- 			<div class="alert  alert-danger  alert-dismissible" role="alert"> -->
+<!-- 				<button type="button" class="close" data-dismiss="alert" -->
+<!-- 					aria-label="Close"> -->
+<!-- 					<span aria-hidden="true">&times;</span> -->
+<!-- 				</button> -->
+<!-- 				<i class="fa  fa-exclamation-circle"></i> Já existe um bovino com o -->
+<!-- 				nome informado. -->
+<!-- 			</div> -->
 
 			<form class="form-vertical  js-form-loading" method="POST" action="/bovinos" th:object="${bovino}">
 				<div layout:include="layout/MensagemGeral"></div>
-    			<div layout:include="layout/MensagemErro"></div>
+    		
 				
 				<div class="row">
 				<input type="hidden" th:field="*{idBovino}"/>
@@ -45,6 +45,14 @@
 				
 				<div class="form-group" name="tag" >
 						<input id="tag"  type="hidden" class="form-control" th:field="*{tag}" />
+				</div>
+				
+				<div class="form-group" name="ecc" >
+						<input id="ecc"  type="hidden" class="form-control" th:field="*{ecc}" />
+				</div>
+				
+				<div class="form-group" name="peso" >
+						<input id="peso"  type="hidden" class="form-control" th:field="*{peso}" />
 				</div>
 				
 				
@@ -165,13 +173,15 @@
 									<td class="table-pesq-bovino-col-center"   th:text="${ecc.escore}"></td> 
 								<td class="table-alter-bovino-col-center">
 									<div class="btn-group">
-										<button class="btn  btn-default btn-xs">
-											<i class="fa  fa-pencil"></i>
-										</button>
-										
-										<button class="btn  btn-default btn-xs">
-											<i class="fa  fa-trash"></i>
-										</button>
+									
+											<a class="btn  btn-default btn-xs" >
+												<span class="fa  fa-pencil"></span>
+											</a>
+
+											<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+												th:attr="data-codigo='ecc/'+${ecc.idECC}, data-descricao='o Ecc ' + ${ecc.escore} ">
+												<span class="fa  fa-trash"></span>
+											</a>
 									</div>
 								</td>
 							</tr>
@@ -203,13 +213,15 @@
 								<td class="table-pesq-bovino-col-center"   th:text="${peso.peso} + ' Kg' "></td> 
 								<td class="table-alter-bovino-col-center">
 									<div class="btn-group">
-										<button class="btn  btn-default btn-xs">
-											<i class="fa  fa-pencil"></i>
-										</button>
+										<a class="btn  btn-default btn-xs" >
+											<span class="fa  fa-pencil"></span>
+										</a>
 										
-										<button class="btn  btn-default btn-xs">
-											<i class="fa  fa-trash"></i>
-										</button>
+										<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
+												th:attr="data-codigo='peso/'+${peso.idPeso}, data-descricao='o Peso ' + ${peso.peso} ">
+												<span class="fa  fa-trash"></span>
+											</a>
+										
 									</div>
 								</td>
 							</tr>
@@ -221,11 +233,22 @@
 
 				<div class="form-group">
 					<button class="btn  btn-primary" type="submit">Salvar</button>
-					<a th:href="@{/bovinos}" class="btn  btn-default">Cancelar</a> <a href="#"
-						class="btn  btn-link  aw-btn-link-danger">Excluir este Bovino</a>
+					<a th:href="@{/bovinos}" class="btn  btn-default">Cancelar</a> 
+<!-- 					<a  class="btn  btn-link  aw-btn-link-danger" data-toggle="modal"  -->
+<!-- 								data-target="#confirmacaoExclusaoModal" -->
+<!-- 								th:attr="data-codigo=${bovino.idBovino}, data-descricao=${bovino.nomeBovino}">Excluir este Bovino -->
+<!-- 					</a> -->
+					
+<!-- 					<div class="btn-group">	 -->
+<!-- 						<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal" -->
+<!-- 									th:attr="data-codigo=${bovino.idBovino}, data-descricao=${bovino.nomeBovino}"> -->
+<!-- 									<span class="fa  fa-trash"></span> -->
+<!-- 								</a> -->
+<!-- 								</div> -->
 				</div>
 
 			</form>
+			<div layout:include="/layout/DialogoConfirmacaoExclusao"></div>
 		</div>
 
 	</section>

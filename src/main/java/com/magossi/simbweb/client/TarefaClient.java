@@ -8,6 +8,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
 import com.magossi.simbweb.domain.tarefa.Tarefa;
 
 
@@ -27,6 +28,17 @@ public class TarefaClient {
 		
 		RequestEntity<Tarefa> request = RequestEntity
 				.post(URI.create(URI_BASE))
+				.body(tarefa);
+		
+		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
+		
+		return response.getHeaders().getLocation().toString();
+	}
+	
+	public String alterar(Tarefa tarefa){
+		
+		RequestEntity<Tarefa> request = RequestEntity
+				.put(URI.create("http://192.168.0.100:8080/tarefa"))
 				.body(tarefa);
 		
 		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
@@ -73,6 +85,20 @@ public class TarefaClient {
 		return Arrays.asList(response.getBody());
 			
 	}
+	
+public List<Tarefa> listarTarefasBovinoMatriz(Long codigo){
+		
+		RequestEntity<Void> request = RequestEntity
+				.get(URI.create(URI_BASE+"/bovinoMatriz/"+codigo))
+				.build();
+		ResponseEntity<Tarefa[]> response = restTemplate.exchange(request, Tarefa[].class);
+		return Arrays.asList(response.getBody());
+			
+	}
+	
+	
+	
+	
 	
 	
 
