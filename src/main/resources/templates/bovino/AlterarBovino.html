@@ -30,6 +30,7 @@
 
 			<form class="form-vertical  js-form-loading" method="POST" action="/bovinos" th:object="${bovino}">
 				<div layout:include="layout/MensagemGeral"></div>
+				<div layout:include="layout/MensagemErro"></div>
     		
 				
 				<div class="row">
@@ -47,13 +48,13 @@
 						<input id="tag"  type="hidden" class="form-control" th:field="*{tag}" />
 				</div>
 				
-				<div class="form-group" name="ecc" >
-						<input id="ecc"  type="hidden" class="form-control" th:field="*{ecc}" />
-				</div>
+<!-- 				<div class="form-group" name="ecc" > -->
+<!-- 						<input id="ecc"  type="hidden" class="form-control" th:field="${bovino.ecc}" /> -->
+<!-- 				</div> -->
 				
-				<div class="form-group" name="peso" >
-						<input id="peso"  type="hidden" class="form-control" th:field="*{peso}" />
-				</div>
+<!-- 				<div class="form-group" name="peso" > -->
+<!-- 						<input id="peso"  type="hidden" class="form-control" th:field="${bovino.peso}" /> -->
+<!-- 				</div> -->
 				
 				
 					<div class="col-sm-4">
@@ -174,7 +175,13 @@
 								<td class="table-alter-bovino-col-center">
 									<div class="btn-group">
 									
-											<a class="btn  btn-default btn-xs" >
+											<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#editarEccModal"
+												th:attr="data-uri='editarEcc', 
+ 												data-descricao='o Ecc ' + ${ecc.escore}, 
+												data-idECC=${ecc.idECC}, 
+												data-dataInclusao=${ecc.dataInclusao}, 
+ 												data-status=${ecc.status},  
+												data-escore=${ecc.escore} "> 
 												<span class="fa  fa-pencil"></span>
 											</a>
 
@@ -213,7 +220,14 @@
 								<td class="table-pesq-bovino-col-center"   th:text="${peso.peso} + ' Kg' "></td> 
 								<td class="table-alter-bovino-col-center">
 									<div class="btn-group">
-										<a class="btn  btn-default btn-xs" >
+										<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#editarPesoModal"
+										th:attr="data-uri='editarPeso', 
+												data-descricao=${peso.peso} + ' Kg' , 
+												data-idPeso=${peso.idPeso}, 
+												data-dataInclusao=${peso.dataInclusao}, 
+												data-dataPesagem=${peso.dataPesagem}, 
+												data-status=${peso.status}, 
+ 												data-peso=${peso.peso} "> 
 											<span class="fa  fa-pencil"></span>
 										</a>
 										
@@ -249,6 +263,8 @@
 
 			</form>
 			<div layout:include="/layout/DialogoConfirmacaoExclusao"></div>
+			<div layout:include="/layout/DialogoEditarEcc"></div>
+			<div layout:include="/layout/DialogoEditarPeso"></div>
 		</div>
 
 	</section>

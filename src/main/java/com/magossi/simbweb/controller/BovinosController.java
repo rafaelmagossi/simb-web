@@ -22,8 +22,10 @@ import com.magossi.simbweb.client.EccClient;
 import com.magossi.simbweb.client.PesoClient;
 import com.magossi.simbweb.client.TarefaClient;
 import com.magossi.simbweb.domain.bovino.Bovino;
+import com.magossi.simbweb.domain.bovino.Ecc;
 import com.magossi.simbweb.domain.bovino.Fazenda;
 import com.magossi.simbweb.domain.bovino.Pelagem;
+import com.magossi.simbweb.domain.bovino.Peso;
 import com.magossi.simbweb.domain.bovino.Proprietario;
 import com.magossi.simbweb.domain.bovino.Raca;
 import com.magossi.simbweb.domain.tarefa.Tarefa;
@@ -78,11 +80,12 @@ public class BovinosController {
 	
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String alterar(@Validated Bovino bovino, Errors errors, RedirectAttributes attributes) {
-		if (errors.hasErrors()) {
-			return ALTERAR_BOVINO_VIEW;
-		}
+	public String alterar(@Validated Bovino bovino, RedirectAttributes attributes) {
 		
+		
+		Bovino bovinoAux = bovinoClient.listarUm(bovino.getIdBovino());
+		bovino.setEcc(bovinoAux.getEcc());
+		bovino.setPeso(bovinoAux.getPeso());
 		
 		
 		try {
@@ -90,19 +93,43 @@ public class BovinosController {
 			attributes.addFlashAttribute("mensagem", "Bovino alterado com sucesso!");
 			return "redirect:/bovinos";
 		} catch (IllegalArgumentException e) {
-			errors.rejectValue("dataVencimento", null, e.getMessage());
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
 			return ALTERAR_BOVINO_VIEW;
 		}
 	}
 	
-	
+
 	
 	@RequestMapping("{codigo}")
 	public ModelAndView edicao(@PathVariable("codigo") Long codigo) {
 		auxBovino = bovinoClient.listarUm(codigo);
+		Ecc ecc = new Ecc();
+		Peso peso = new Peso();
+		//ecc.setEscore(0);
 		ModelAndView mv = new ModelAndView(ALTERAR_BOVINO_VIEW); 
 		mv.addObject(auxBovino);
+		mv.addObject(ecc);
+		mv.addObject(peso);
 		return mv;
+	}
+	
+	
+	/* ------------------------------------ PUT ----------------------------------------*/
+	
+	@RequestMapping(value="/editarEcc", method = RequestMethod.PUT)
+	public String alterarEcc(@Validated Ecc ecc, Errors errors, RedirectAttributes attributes) {
+	
+			System.out.println(ecc.getEscore());
+			attributes.addFlashAttribute("mensagem", "Ecc alterado com sucesso!");
+			return "redirect:/bovinos/"+auxBovino.getIdBovino();
+	}
+	
+	@RequestMapping(value="/editarPeso", method = RequestMethod.PUT)
+	public String alterarEcc(@Validated Peso peso, Errors errors, RedirectAttributes attributes) {
+	
+			System.out.println(peso.getPeso());
+			attributes.addFlashAttribute("mensagem", "Peso alterado com sucesso!");
+			return "redirect:/bovinos/"+auxBovino.getIdBovino();
 	}
 	
 	/* ----------------------------------- DELETE ---------------------------------------*/
@@ -203,6 +230,21 @@ public class BovinosController {
 		generos.add(true);
 		generos.add(false);
 		return generos;
+	}
+	
+	
+	
+	@ModelAttribute("todosEccs")
+	public List<Ecc> todosEccsBovino() {
+		List<Ecc> eccs = new ArrayList<Ecc>();
+
+		for(int i=0; i<9 ; i++){
+			Ecc ecc = new Ecc();
+			ecc.setIdECC(0L);
+			ecc.setEscore(i+1);
+			eccs.add(ecc);
+		}
+		return eccs;
 	}
 	
 	
