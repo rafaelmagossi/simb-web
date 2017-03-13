@@ -7,6 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.magossi.simbweb.domain.bovino.Peso;
+
+
+
 
 @Component
 public class PesoClient {
@@ -24,6 +28,28 @@ public class PesoClient {
 		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
 		
 		return response.getStatusCode().toString();
+	}
+	
+	public String alterar(Peso peso) {
+		
+		RequestEntity<Peso> request = RequestEntity
+				.put(URI.create(URI_BASE))
+				.body(peso);
+		
+		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
+		
+		return response.getHeaders().getLocation().toString();
+		
+	}
+	
+public Peso listarUm(Long codigo){
+		
+		RequestEntity<Void> request = RequestEntity
+				.get(URI.create("http://192.168.0.100:8080/peso/"+codigo))
+				.build();
+		ResponseEntity<Peso> response = restTemplate.exchange(request, Peso.class);
+		return response.getBody();
+			
 	}
 
 }

@@ -21,16 +21,16 @@ $('#editarEccModal').on('show.bs.modal', function(event) {
 	
 	
 	var uri = button.data('uri');
-	var idEcc = button.data('idECC')
+	var idEcc = button.data('id')
 	var escore = button.data('escore')
 	var status = button.data('status')
-	var dataInclusao = button.data('dataInclusao')
+	var datai = button.data('dataInclusao')
 	var descricaoTitulo = button.data('descricao');
 
-	
+	//window.alert(status);
 	$(".ecc_id").val(idEcc);
 	$(".ecc_status").val(status);
-	$(".ecc_dataInclusao").val(dataInclusao);
+	$(".ecc_data").val(datai);
 	$(".ecc_escore").val(escore);
 	
 	var modal = $(this);
@@ -51,18 +51,18 @@ $('#editarPesoModal').on('show.bs.modal', function(event) {
 	
 	
 	var uri = button.data('uri');
-	var idPeso = button.data('idPeso')
+	var id = button.data('id')
 	var peso = button.data('peso')
 	var status = button.data('status')
-	var dataInclusao = button.data('dataInclusao')
-	var dataPesagem = button.data('dataPesagem')
+	var datainclusao = button.data('datainclusao')
+	var datapesagem = button.data('datapesagem')
 	var descricaoTitulo = button.data('descricao');
 
-	
-	$(".peso_id").val(idPeso);
+	//window.alert(peso);
+	$(".peso_id").val(id);
 	$(".peso_status").val(status);
-	$(".peso_dataInclusao").val(dataInclusao);
-	$(".peso_dataPesagem").val(dataPesagem);
+	$(".peso_datainclusao").val(datainclusao);
+	$(".peso_datapesagem").val(datapesagem);
 	$(".peso_peso").val(peso);
 	
 	var modal = $(this);

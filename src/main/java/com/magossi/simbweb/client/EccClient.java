@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.magossi.simbweb.domain.bovino.Ecc;
+
 
 @Component
 public class EccClient {
@@ -24,6 +26,19 @@ public class EccClient {
 		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
 		
 		return response.getStatusCode().toString();
+	}
+
+
+	public String alterar(Ecc ecc) {
+		
+		RequestEntity<Ecc> request = RequestEntity
+				.put(URI.create(URI_BASE))
+				.body(ecc);
+		
+		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
+		
+		return response.getHeaders().getLocation().toString();
+		
 	}
 
 }

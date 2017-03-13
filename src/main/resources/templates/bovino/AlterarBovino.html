@@ -177,8 +177,8 @@
 									
 											<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#editarEccModal"
 												th:attr="data-uri='editarEcc', 
- 												data-descricao='o Ecc ' + ${ecc.escore}, 
-												data-idECC=${ecc.idECC}, 
+ 												data-descricao='o Ecc ' + ${ecc.escore},		  
+												data-id=${ecc.idECC}, 
 												data-dataInclusao=${ecc.dataInclusao}, 
  												data-status=${ecc.status},  
 												data-escore=${ecc.escore} "> 
@@ -223,9 +223,9 @@
 										<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#editarPesoModal"
 										th:attr="data-uri='editarPeso', 
 												data-descricao=${peso.peso} + ' Kg' , 
-												data-idPeso=${peso.idPeso}, 
-												data-dataInclusao=${peso.dataInclusao}, 
-												data-dataPesagem=${peso.dataPesagem}, 
+												data-id=${peso.idPeso}, 
+												data-datainclusao=${peso.dataInclusao}, 
+												data-datapesagem=${peso.dataPesagem}, 
 												data-status=${peso.status}, 
  												data-peso=${peso.peso} "> 
 											<span class="fa  fa-pencil"></span>

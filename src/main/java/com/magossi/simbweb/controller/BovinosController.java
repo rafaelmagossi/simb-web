@@ -103,13 +103,9 @@ public class BovinosController {
 	@RequestMapping("{codigo}")
 	public ModelAndView edicao(@PathVariable("codigo") Long codigo) {
 		auxBovino = bovinoClient.listarUm(codigo);
-		Ecc ecc = new Ecc();
-		Peso peso = new Peso();
-		//ecc.setEscore(0);
+
 		ModelAndView mv = new ModelAndView(ALTERAR_BOVINO_VIEW); 
 		mv.addObject(auxBovino);
-		mv.addObject(ecc);
-		mv.addObject(peso);
 		return mv;
 	}
 	
@@ -119,17 +115,48 @@ public class BovinosController {
 	@RequestMapping(value="/editarEcc", method = RequestMethod.PUT)
 	public String alterarEcc(@Validated Ecc ecc, Errors errors, RedirectAttributes attributes) {
 	
-			System.out.println(ecc.getEscore());
+		System.out.println(ecc.getEscore());
+		
+		try {
+			eccClient.alterar(ecc);
 			attributes.addFlashAttribute("mensagem", "Ecc alterado com sucesso!");
 			return "redirect:/bovinos/"+auxBovino.getIdBovino();
+			
+		} 	catch (HttpServerErrorException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			String erro = ""+e.getStatusCode();
+			return "redirect:/"+ erro;
+			
+		}	catch (IllegalArgumentException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			return ALTERAR_BOVINO_VIEW;
+		}
+			
+			
+			
 	}
 	
 	@RequestMapping(value="/editarPeso", method = RequestMethod.PUT)
 	public String alterarEcc(@Validated Peso peso, Errors errors, RedirectAttributes attributes) {
+		
+			Peso auxPeso = pesoClient.listarUm(peso.getIdPeso());
+			peso.setDataPesagem(auxPeso.getDataPesagem());
+			
 	
-			System.out.println(peso.getPeso());
+		try {
+			pesoClient.alterar(peso);
 			attributes.addFlashAttribute("mensagem", "Peso alterado com sucesso!");
 			return "redirect:/bovinos/"+auxBovino.getIdBovino();
+			
+		} 	catch (HttpServerErrorException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			String erro = ""+e.getStatusCode();
+			return "redirect:/"+ erro;
+			
+		}	catch (IllegalArgumentException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			return ALTERAR_BOVINO_VIEW;
+		}
 	}
 	
 	/* ----------------------------------- DELETE ---------------------------------------*/

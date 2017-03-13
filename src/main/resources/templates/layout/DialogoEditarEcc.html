@@ -5,7 +5,7 @@
 
 <div class="modal fade" id="editarEccModal"  tabindex="-1" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
-		<form class="form-vertical  js-form-loading"  method="POST" th:object="${ecc}" th:attr="data-url-base=@{/bovinos}">
+		<form class="form-vertical  js-form-loading"  method="POST"  th:attr="data-url-base=@{/bovinos}">
 			<input type="hidden" name="_method" value="PUT"/>
 			
 			<div class="modal-content">
@@ -15,14 +15,14 @@
 				
 				<div class="modal-body">
 					<div class="row">
-						<input  name="idECC" type="hidden" class="form-control ecc_id" th:field="*{idECC}"/>
+<!-- 						<input  id="idECC" name="idECC" type="hidden" class="form-control ecc_id" /> -->
+						<input type="hidden"  id="idECC" name="idECC"  class="form-control ecc_id"  />
 					
-						<div class="form-group" name="dataInclusao" >
-								<input id="dataInclusao"  type="hidden" class="form-control ecc_dataInclusao" th:field="*{dataInclusao}" />
-						</div>
+						<input type="hidden" id="dataInclusao" name="dataInclusao" class="form-control ecc_data" />
+					
 						
 						<div class="form-group" name="status" >
-								<input id="status"  type="hidden" class="form-control ecc_status" th:field="*{status}" />
+								<input id="status"  type="hidden" class="form-control ecc_status"  />
 						</div>
 						
 						<div class="col-sm-4">
