@@ -10,10 +10,35 @@ $('#confirmacaoExclusaoModal').on('show.bs.modal', function(event) {
 	if (!action.endsWith('/')) {
 		action += '/';
 	}
+	
+	window.alert(action);
 	form.attr('action', action + codigoTitulo);
 	
 	modal.find('.modal-body span').html('Tem certeza que deseja excluir <strong>' + descricaoTitulo + '</strong>?');
 });
+
+$('#confirmacaoExclusaoModalTarefa').on('show.bs.modal', function(event) {
+	var button = $(event.relatedTarget);
+	
+	var codigoTitulo = button.data('codigo');
+	var tipo = button.data('tipo');
+	var descricaoTitulo = button.data('descricao');
+	
+	var modal = $(this);
+	var form = modal.find('form');
+	var action = form.data('url-base');
+	if (!action.endsWith('/')) {
+		action += '/';
+	}
+	
+//	var url = action + tipo +"/" + codigoTitulo
+//	window.alert(url);
+	form.attr('action', action + tipo +"/" + codigoTitulo);
+	
+	modal.find('.modal-body span').html('Tem certeza que deseja excluir <strong>' + descricaoTitulo + '</strong>?');
+});
+
+
 
 
 $('#editarEccModal').on('show.bs.modal', function(event) {

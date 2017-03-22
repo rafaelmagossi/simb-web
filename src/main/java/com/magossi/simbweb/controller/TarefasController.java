@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -42,6 +43,7 @@ public class TarefasController {
 	private TarefaClient tarefaClient;
 
 	
+	/* ----------------------------------- GET ---------------------------------------*/
 	
 	@RequestMapping("ativas")
 	public ModelAndView pesquisaAtivos(@RequestParam(defaultValue="todos") String descricao) {
@@ -63,6 +65,22 @@ public class TarefasController {
 		return mv;
 	}
 	
+	@RequestMapping("/adicionar/{codigo}")
+	public ModelAndView edicao(@PathVariable("codigo") Long codigo) {
+		Bovino bovinoMatriz = bovinoClient.listarUm(codigo);
+		
+		Tarefa tarefa = new Tarefa();
+		tarefa.setBovinoMatriz(bovinoMatriz);
+
+		
+		
+		ModelAndView mv = new ModelAndView(ADICIONAR_TAREFA_VIEW); 
+		mv.addObject(tarefa);
+		return mv;
+	}
+	
+	/* ----------------------------------- POST ---------------------------------------*/
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public String salvar(@Validated Tarefa tarefa, Errors errors, RedirectAttributes attributes) {
 		if (errors.hasErrors()) {
@@ -81,19 +99,33 @@ public class TarefasController {
 		}
 	}
 	
-	@RequestMapping("/adicionar/{codigo}")
-	public ModelAndView edicao(@PathVariable("codigo") Long codigo) {
-		Bovino bovinoMatriz = bovinoClient.listarUm(codigo);
-		
-		Tarefa tarefa = new Tarefa();
-		tarefa.setBovinoMatriz(bovinoMatriz);
+	
+	/* ----------------------------------- DELETE ---------------------------------------*/
+	
+	@RequestMapping(value="/concluidas/{codigo}", method = RequestMethod.DELETE)
+	public String excluirTarefasFinalizadas(@PathVariable Long codigo, RedirectAttributes attributes) {
+	
+		Tarefa tarefa = tarefaClient.listarUma(codigo);
+		tarefa.setStatus(false);
+	
 
-		
-		
-		ModelAndView mv = new ModelAndView(ADICIONAR_TAREFA_VIEW); 
-		mv.addObject(tarefa);
-		return mv;
+		try {
+			tarefaClient.alterar(tarefa);
+			attributes.addFlashAttribute("mensagem", "Tarefa excluida com sucesso !");
+			return "redirect:/tarefas/concluidas";
+		}catch (HttpServerErrorException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			String erro = ""+e.getStatusCode();
+			return "redirect:/"+ erro;
+			
+		}catch (IllegalArgumentException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			return PESQUISA_TAREFAS_CONCLUIDAS_VIEW;
+		}
+
 	}
+	
+	
 	
 	@ModelAttribute("todosTiposTarefa")
 	public List<TipoTarefaEnum> todosTiposTarefa() {

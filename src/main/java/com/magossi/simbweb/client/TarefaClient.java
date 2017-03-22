@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.magossi.simbweb.domain.bovino.Bovino;
 import com.magossi.simbweb.domain.tarefa.Tarefa;
 
 
@@ -44,6 +45,17 @@ public class TarefaClient {
 		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
 		
 		return response.getHeaders().getLocation().toString();
+	}
+	
+	
+public Tarefa listarUma(Long codigo){
+		
+		RequestEntity<Void> request = RequestEntity
+				.get(URI.create("http://192.168.0.100:8080/tarefa/"+codigo))
+				.build();
+		ResponseEntity<Tarefa> response = restTemplate.exchange(request, Tarefa.class);
+		return response.getBody();
+			
 	}
 	
 	public List<Tarefa> listarAtivas(){

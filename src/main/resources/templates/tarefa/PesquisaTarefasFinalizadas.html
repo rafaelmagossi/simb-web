@@ -26,6 +26,8 @@
 
 	<div class="container-fluid">
 		<form method="GET" class="form-vertical  js-form-loading">
+		<div layout:include="layout/MensagemGeral"></div>
+		
 			<div class="form-group">
 				<div class="row">
 					<div class="col-sm-4">
@@ -62,14 +64,18 @@
 <!-- 						<td class="aw-table-checkbox"><input type="checkbox"/></td> -->
 						<td class="table-pesq-bovino-col-center"   th:text="${#dates.format(tarefa.dataInclusao, 'dd/MM/yyyy - HH:mm')}"></td>
 						<td class="table-pesq-bovino-col-center"   th:text="${tarefa.tipoTarefa}"></td>
-						<td class="table-pesq-bovino-col-center"   th:text="${tarefa.imei}"></td>
+						<td class="table-pesq-bovino-col-center" th:switch="${tarefa.imei}">
+						  <p th:case="'354983059791193'">Sebastiao</p>						 
+						  <p th:case="*"><b>Sem Registro</b></p>	
+						</td>
 						<td class="table-pesq-bovino-col-center" th:text="${tarefa.bovinoMatriz.nomeBovino}"></td>
 						<td class="table-pesq-bovino-col-center">
 						
 							<div class="btn-group">
-								<button class="btn  btn-default btn-xs">
-									<i class="fa  fa-trash"></i>
-								</button>
+								<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModalTarefa"
+									th:attr="data-codigo=${tarefa.idTarefa}, data-descricao=${tarefa.tipoTarefa}, data-tipo=concluidas">
+									<span class="fa  fa-trash"></span>
+								</a>
 							</div>						
 						</td>
 					</tr>
@@ -85,6 +91,7 @@
 				<span class="aw-pagination-info" th:text="${#lists.size(tarefas)} + ' tarefa(s) encontradas'"></span>
 			</div>
 		</div>
+		<div layout:include="/layout/DialogoConfirmacaoExclusaoTarefa"></div>
 	</div>
 
 </section>
