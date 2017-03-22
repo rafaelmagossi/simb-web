@@ -30,8 +30,10 @@ import com.magossi.simbweb.domain.tarefa.TipoTarefaEnum;
 public class TarefasController {
 	
 	private static final String ADICIONAR_TAREFA_VIEW = "tarefa/AdicionarTarefa";
+	private static final String ALTERAR_TAREFA_VIEW = "tarefa/AlterarTarefa";
 	private static final String PESQUISA_TAREFAS_ATIVAS_VIEW = "tarefa/PesquisaTarefasAbertas";
 	private static final String PESQUISA_TAREFAS_CONCLUIDAS_VIEW = "tarefa/PesquisaTarefasFinalizadas";
+	
 	
 	@Autowired
 	private FuncionarioClient funcionarioClient;
@@ -71,10 +73,18 @@ public class TarefasController {
 		
 		Tarefa tarefa = new Tarefa();
 		tarefa.setBovinoMatriz(bovinoMatriz);
-
-		
 		
 		ModelAndView mv = new ModelAndView(ADICIONAR_TAREFA_VIEW); 
+		mv.addObject(tarefa);
+		return mv;
+	}
+	
+	@RequestMapping("/alterar/{codigo}")
+	public ModelAndView alterar(@PathVariable("codigo") Long codigo) {
+		Tarefa tarefa = tarefaClient.listarUma(codigo);
+		System.out.println("DATA INCLUSAO: " + tarefa.getDataInclusao());
+
+		ModelAndView mv = new ModelAndView(ALTERAR_TAREFA_VIEW); 
 		mv.addObject(tarefa);
 		return mv;
 	}
@@ -91,11 +101,47 @@ public class TarefasController {
 		
 		try {
 			tarefaClient.salvar(tarefa);
-			attributes.addFlashAttribute("mensagem", "Bovino salvo com sucesso!");
+			attributes.addFlashAttribute("mensagem", "Tarefa salva com sucesso!");
 			return "redirect:/bovinos";
+		} catch (HttpServerErrorException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			String erro = ""+e.getStatusCode();
+			return "redirect:/"+ erro;
+			
 		} catch (IllegalArgumentException e) {
 			errors.rejectValue("dataVencimento", null, e.getMessage());
 			return ADICIONAR_TAREFA_VIEW;
+		}
+	}
+	
+	/* ----------------------------------- PUT ---------------------------------------*/
+	
+	@RequestMapping(method = RequestMethod.PUT)
+	public String alterar(@Validated Tarefa tarefa, RedirectAttributes attributes) {
+		
+		
+		Tarefa tarefaAux = tarefaClient.listarUma(tarefa.getIdTarefa());
+		tarefaAux.setTipoTarefa(tarefa.getTipoTarefa());
+		tarefaAux.setDataInclusao(tarefa.getDataInclusao());
+		tarefaAux.setImei(tarefa.getImei());
+		
+		System.out.println("ID: " + tarefaAux.getIdTarefa());
+		System.out.println("BOVINO: " + tarefaAux.getBovinoMatriz().getNomeBovino());
+		System.out.println("IMEI: " + tarefaAux.getImei());
+		System.out.println("TIPO: " + tarefaAux.getTipoTarefa());
+		System.out.println("STATUS: " + tarefaAux.isStatus());
+		System.out.println("STATUS TAREFA: " + tarefaAux.getStatusDaTarefa());
+		System.out.println("DATA INCLUSAO: " + tarefaAux.getDataInclusao());
+		System.out.println("DATA CONCLUSAO: " + tarefaAux.getDataConclusao());
+		
+		
+		try {
+			tarefaClient.alterar(tarefaAux);
+			attributes.addFlashAttribute("mensagem", "Tarefa alterada com sucesso!");
+			return "redirect:/tarefas/ativas";
+		} catch (IllegalArgumentException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			return ALTERAR_TAREFA_VIEW;
 		}
 	}
 	

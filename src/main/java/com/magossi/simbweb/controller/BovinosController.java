@@ -72,6 +72,15 @@ public class BovinosController {
 		return mv;
 	}
 	
+	@RequestMapping("{codigo}")
+	public ModelAndView edicao(@PathVariable("codigo") Long codigo) {
+		auxBovino = bovinoClient.listarUm(codigo);
+
+		ModelAndView mv = new ModelAndView(ALTERAR_BOVINO_VIEW); 
+		mv.addObject(auxBovino);
+		return mv;
+	}
+	
 	
 	
 	
@@ -100,14 +109,7 @@ public class BovinosController {
 	
 
 	
-	@RequestMapping("{codigo}")
-	public ModelAndView edicao(@PathVariable("codigo") Long codigo) {
-		auxBovino = bovinoClient.listarUm(codigo);
 
-		ModelAndView mv = new ModelAndView(ALTERAR_BOVINO_VIEW); 
-		mv.addObject(auxBovino);
-		return mv;
-	}
 	
 	
 	/* ------------------------------------ PUT ----------------------------------------*/

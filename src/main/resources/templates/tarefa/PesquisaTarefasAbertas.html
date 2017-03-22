@@ -75,9 +75,9 @@
 						<td class="table-pesq-bovino-col-center">
 						
 							<div class="btn-group">
-<!-- 								<a class="btn  btn-default btn-xs" th:href="@{/bovinos/{codigo}(codigo=${bovino.idBovino})}"> -->
-<!-- 									<i class="fa  fa-pencil"></i> -->
-<!-- 								</a> -->
+								<a class="btn  btn-default btn-xs" th:href="@{/tarefas/alterar/{codigo}(codigo=${tarefa.idTarefa})}">
+									<i class="fa  fa-pencil"></i>
+								</a>
 								
 								<a class="btn  btn-default btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModalTarefa"
 									th:attr="data-codigo=${tarefa.idTarefa}, data-descricao=${tarefa.tipoTarefa}, data-tipo=ativas">
