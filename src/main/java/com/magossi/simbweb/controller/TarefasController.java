@@ -125,6 +125,25 @@ public class TarefasController {
 
 	}
 	
+	@RequestMapping(value="/ativas/{codigo}", method = RequestMethod.DELETE)
+	public String excluirTarefasAtivas(@PathVariable Long codigo, RedirectAttributes attributes) {
+		
+		try {
+			tarefaClient.deletar(codigo);
+			attributes.addFlashAttribute("mensagem", "Tarefa excluida com sucesso !");
+			return "redirect:/tarefas/ativas";
+		} catch (HttpServerErrorException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			String erro = ""+e.getStatusCode();
+			return "redirect:/"+ erro;
+		}catch (IllegalArgumentException e) {
+			//errors.rejectValue("dataVencimento", null, e.getMessage());
+			return PESQUISA_TAREFAS_ATIVAS_VIEW;
+		}
+	
+
+	}
+	
 	
 	
 	@ModelAttribute("todosTiposTarefa")

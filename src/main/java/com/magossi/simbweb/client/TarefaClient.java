@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.magossi.simbweb.domain.bovino.Bovino;
+
 import com.magossi.simbweb.domain.tarefa.Tarefa;
 
 
@@ -36,6 +36,17 @@ public class TarefaClient {
 		return response.getHeaders().getLocation().toString();
 	}
 	
+	public String deletar(Long codigo){
+		
+		RequestEntity<Void> request = RequestEntity
+				.delete(URI.create(URI_BASE + "/" + codigo))
+				.build();
+		
+		ResponseEntity<Void> response = restTemplate.exchange(request, Void.class);
+		
+		return response.getStatusCode().toString();
+	}
+	
 	public String alterar(Tarefa tarefa){
 		
 		RequestEntity<Tarefa> request = RequestEntity
@@ -48,7 +59,7 @@ public class TarefaClient {
 	}
 	
 	
-public Tarefa listarUma(Long codigo){
+	public Tarefa listarUma(Long codigo){
 		
 		RequestEntity<Void> request = RequestEntity
 				.get(URI.create("http://192.168.0.100:8080/tarefa/"+codigo))
